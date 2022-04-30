@@ -1,0 +1,107 @@
+{%extends 'Staff_index.html'%} {% block content %} {% load static %}
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                {% for i in mem1 %}
+                <div class="card-body">
+                    <h4 class="card-title"></h4>
+                    <form class="forms-sample" method="post" action="{% url 'staff_acc_save' i.id %}"
+                    enctype="multipart/form-data">
+                    {% csrf_token %}
+                        <div class="row">
+                            
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">full Name</label>
+                                    <div class="col-sm-9">
+                                        <input name="fname" type="text" class="form-control" value="{{i.fullname}}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">photo</label>
+                                    <div class="col-sm-9">
+                                        <input name="pic" type="file" class="form-control" placeholder="{{i.photo}}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Email</label>
+                                    <div class="col-sm-9">
+                                        <input name="email" type="email" class="form-control"value="{{i.email}}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Contact</label>
+                                    <div class="col-sm-9">
+                                        <input name="contact" type="text" class="form-control" value="{{i.mobile}}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="card-description"> Address </p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Address 1</label>
+                                    <div class="col-sm-9">
+                                        <input name="ad1" type="text" class="form-control" value="{{i.address1}}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">State</label>
+                                    <div class="col-sm-9">
+                                        <input name="state" type="text" class="form-control" value="{{i.State}}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Address 2</label>
+                                    <div class="col-sm-9">
+                                        <input name="ad2" type="text" class="form-control" value="{{i.address2}}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Postcode</label>
+                                    <div class="col-sm-9">
+                                        <input name="pcode" type="text" class="form-control" value="{{i.pincode}}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">City</label>
+                                    <div class="col-sm-9">
+                                        <input name="city" type="text" class="form-control" value="{{i.district}}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="float-right">
+                           <center><button type="submit" class="btn btn-primary">Update</button></center> 
+                        </div>
+                        {% endfor %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        {% endblock %}

@@ -1,0 +1,39 @@
+{%extends 'base.html'%} {% block content %} {% load static %}
+
+
+<div class="bg-dark m-0 p-0" style="height: 85px;"></div>
+<div class="site-section bg-light">
+  <div class="container">
+    {% for i in req %}
+    {% if i.status != 'pending' %} {% if i.status != 'confirmed' %} {% if i.status != 'assigned' %}
+      <div class="col-md-6 col-lg-8 mb-4 mb-lg-4 ">
+        <div class="unit-4 d-flex">
+          <div class="unit-4-icon mr-4"><span class="text-primary flaticon-platform"></span></div>
+          <div>
+            <h3>{{i.status}}</h3>
+            {% if i.status == 'rejected' %}
+            <p>Your request for {{i.companyname}} product Shipment has been rejected</p>
+            <p><a href="{% url 'order_confirmation' i.id %}">Learn More</a></p>
+            {% else %}
+            
+            
+            {% if i.status == 'confirmed' %}
+            <p>Your request for {{i.companyname}} product Shipment has been confirmed</p>
+            <p></p>
+            {% else %}
+            <p>Your request for {{i.companyname}} product Shipment has been approved</p>
+            <p><a href="{% url 'order_confirmation' i.id %}">Confirm Your order</a></p>
+            {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% endif %}
+      {% endif %}
+      {% endfor %}
+      
+    </div>
+  </div>
+</div>
+{% endblock %}

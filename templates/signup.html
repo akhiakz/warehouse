@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport"
+			content="width=device-width,
+					initial-scale=1.0" />
+		<script src="https://kit.fontawesome.com/5845bc1bb6.js"
+				crossorigin="anonymous"></script>
+		<link href=
+"https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@600&display=swap"
+			rel="stylesheet" />
+		<style>
+			/*CSS Reset*/
+			* {
+				margin: 0px;
+				padding: 0px;
+				color: white;
+			}
+			/*Stling the body*/
+			body {
+				background: url("{% static 'images/login.jpg' %}")
+				no-repeat center center fixed;
+				background-size: cover;
+			}
+
+			/*Styling the name LogIn*/
+			h1 {
+				border-bottom: 3px solid black;
+
+				margin-bottom: 10px;
+				color: black;
+				font-weight: bold;
+				background: none;
+				margin-right: 150px;
+				margin-top: 1px;
+				font-family: "Baloo Bhai 2", cursive;
+			}
+
+			/*Styling the class container*/
+			.container {
+				width: 100%;
+				height: 100vh;
+				display: flex;
+				justify-content: center;
+				flex-direction: column;
+				align-items: center;
+			}
+			.row1 {
+				position: absolute; 
+				right: 40%;
+			}
+
+			/*Styling and positioning the login form*/
+			.row {
+				position: relative;
+			}
+			.row input {
+				position: relative;
+				left: 25px;
+				margin: 10px;
+				padding: 10px;
+				width: 80%;
+				outline: none;
+				background: none;
+				border: 0px;
+				font-weight: bold;
+				border-bottom: 3px solid black;
+				font-family: "Baloo Bhai 2", cursive;
+				color: black;
+			}
+			.row i {
+				position: absolute;
+				margin-top: 10px;
+				padding: 10px;
+				color: black;
+			}
+			/*Styling the buttons in the login*/
+			.btn {
+				width: 4rem;
+				border-radius: 15px;
+				background: none;
+				margin-right: 105px;
+				background-color: black;
+				color: blanchedalmond;
+				outline: none;
+				font-family: "Baloo Bhai 2", cursive;
+				cursor: pointer;
+			}
+			.btn:hover {
+				background-color: red;
+				color: white;
+			}
+		</style>
+		<title>Transparent Login Page using HTML/CSS</title>
+	</head>
+
+	<body>
+		<form action="{% url 'signuppage' %}" method="post">
+		{% csrf_token %}
+		<div class="container">
+			<div class="row1">
+				<h1>SignUp</h1>
+
+				<div class="row">
+					<i class="fas fa-envelope-square"></i>
+					<input type="firstname" name="first_name"
+						placeholder="Enter your firstname" />
+				</div>
+
+				<div class="row">
+					<i class="fas fa-envelope-square"></i>
+					<input type="lastname" name="last_name"
+						placeholder="Enter your lastname" />
+				</div>
+
+								<div class="row">
+					<i class="fas fa-envelope-square"></i>
+					<input type="username" name="username"
+						placeholder="Enter your username" />
+				</div>
+				
+				<div class="row">
+					<i class="fas fa-envelope-square"></i>
+					<input type="password" name="password"
+						placeholder="Enter your password" />
+				</div>
+				<div class="row">
+					<i class="fas fa-envelope-square"></i>
+					<input type="password" name="cpassword"
+						placeholder="Confirm password" />
+				</div>
+				
+				<button class="btn">SUBMIT</a></button>
+			</div>
+		</div>
+		</form>
+	</body>
+</html>

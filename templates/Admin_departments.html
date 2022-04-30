@@ -1,0 +1,40 @@
+{%extends 'Admin_index.html'%} {% block content %} {% load static %}
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-md-4 stretch-card grid-margin">
+                <a href="{% url 'Admin_create_departments' %}" style="text-decoration: none; color: white;">
+                    <div class="card bg-gradient-danger card-img-holder text-white">
+                        <div class="card-body">
+                            <i class=" icon-lg mdi mdi-codepen"></i>
+                            <h3 class="my-3">Create Department</h3>
+                        </div>
+                </a>
+            </div>
+        </div>
+        <div class="page-header">
+            <h3 class="page-title">
+                <span class="page-title-icon bg-gradient-primary text-white me-2">
+                    <i class="mdi mdi-codepen"></i>
+                </span> Departments
+            </h3>
+        </div>
+
+
+        <div class="row">
+            {% for i in dpt %}
+            <div class="col-md-4 stretch-card grid-margin">
+                <a href="#" style="text-decoration: none; color: white;">
+                    <div class="card bg-gradient-danger card-img-holder text-white">
+                        <div class="card-body">
+                            <h3 class="my-3">{{i.department_name}}</h3>
+                        </div>
+                </a>
+            </div>
+            
+        </div>
+        {% endfor %}
+        
+
+{% endblock %}

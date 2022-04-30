@@ -1,0 +1,60 @@
+{%extends 'base.html'%} {% block content %} {% load static %}
+
+
+<div class="bg-dark m-0 p-0" style="height: 85px;"></div>
+<div class="site-section bg-light">
+  <div class="container">
+    {% for i in req %}
+    {% if i.status != 'pending' %} {% if i.status != 'accepted' %}
+    <div class="col-md-6 grid-margin stretch-card">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="d-sm-flex flex-row flex-wrap text-center text-sm-left align-items-center mr-5">
+            <img src="{% static 'admin/assets/images/faces/truck.jpg' %}" class="img-lg rounded" alt="profile image" />
+            <div class="ms-sm-3 ms-md-0 ms-xl-3 mt-2 mt-sm-0 mt-md-2 mt-xl-0 ml-4">
+              <h5 class="mb-0">{{i.companyname}}</h5>
+              <p class="text-muted mb-1">{{i.producttype}} product</p>
+              {% if i.status == 'confirmed' %}
+              <p class="mb-0">your shipping not yet started </p>
+              {% else %}
+
+                  {% if i.shipment_status == 'Success' %}
+                  <div class="mb-0" style="border: 1px solid rgb(105, 220, 105); padding: 3px 10px; border-radius: 10px; color:rgb(105, 220, 105) ;">shipment Success</div>
+                  {% else %}
+                  <p class="mb-0">your shipping is in progress </p>
+                  <button type="button" class="btn btn-primary btn-sm m-2"
+                  data-toggle="modal" data-target="#exampleModal"> Track </button>
+                  {% endif %}
+              {% endif %}
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% for i in req %}
+<!-- message Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Tracking Status</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{i.tracking_status}}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- message Modal ends -->
+{% endfor %}
+{% endblock %}

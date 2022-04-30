@@ -1,0 +1,27 @@
+{%extends 'Admin_index.html'%} {% block content %} {% load static %}
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Add Department </h4>
+            <form action="{% url 'dpt_save' %}"  class="forms-sample" method="post" enctype="multipart/form-data">
+              {% csrf_token%}
+              <div class="form-group">
+                <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Department Name</label>
+                <div class="col-sm-12">
+                  <input type="text" rows="5" class="form-control" id="exampleInputUsername2" name="dname">
+                </div>
+              </div>
+              <div class="col-md-4 mx-auto">
+              <button type="submit" class="btn btn-gradient-primary w-100 ">Submit</button>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}

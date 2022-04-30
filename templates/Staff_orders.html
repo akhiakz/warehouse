@@ -1,0 +1,75 @@
+{%extends 'Staff_index.html'%} {% block content %} {% load static %}
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="page-title"> Accepted Orders </h3>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <input type="text" class="form-control mb-3" id="myInput" onkeyup="myFunction()"
+              placeholder="Search here.." title="Search here">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="myTable">
+                                <thead>
+                                    <tr>
+                                        <th>sl.no</th>
+                                        <th>Name</th>
+                                        <th>Company name</th>
+                                        <th>Product Line</th>
+                                        <th>Quantity</th>
+                                        <th>payment</th>
+                                        <th>Shipment Date</th>
+                                        <th>Shipment Type</th>
+                                        <th>Update</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in req %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{i.firstname}} {{i.lastname}}</td>
+                                        <td>{{i.companyname}}</td>
+                                        <td>{{i.producttype}}</td>
+                                        <td>{{i.quantity}}</td>
+                                        <td>{{i.rate}}</td>
+                                        <td>10/09/2022</td>
+                                        <td>{{i.tranporttype}}</td>
+                                        <td> <a href="{% url 'Staff_tracking_update' i.id %}" class="btn btn-primary btn-sm">
+                                            <i class="mdi mdi-checkbox-marked-outline"></i> Update </a>
+                                        </td>
+                                        
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function myFunction() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+  </script>
+{% endblock %}
