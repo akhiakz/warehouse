@@ -25,6 +25,10 @@ urlpatterns = [
     path('order_confirmation/<int:id>', views.order_confirmation, name='order_confirmation'),
     path('confirm_order/<int:id>', views.confirm_order, name='confirm_order'),
     path('orders/', views.orders, name='orders'),
+    path('Air_service/', views.Air_service, name='Air_service'),
+    path('Ship_service/', views.Ship_service, name='Ship_service'),
+    path('Ground_service/', views.Ground_service, name='Ground_service'),
+    path('Warehousing/', views.Warehousing, name='Warehousing'),
 
 
 #############   Admin module ################

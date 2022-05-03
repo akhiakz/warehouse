@@ -200,6 +200,19 @@ def orders(request):
 	else:
 		return redirect('/')
 
+def Air_service(request):
+	return render(request, 'Air_service.html')
+
+def Ship_service(request):
+	return render(request, 'Ship_service.html')
+
+def Ground_service(request):
+	return render(request, 'Ground_service.html')
+
+def Warehousing(request):
+	return render(request, 'Warehousing.html')
+
+
 #############   Admin module ################
 
 def Admin_index(request):

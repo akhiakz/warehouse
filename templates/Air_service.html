@@ -1,0 +1,244 @@
+{%extends 'base.html'%} {% block content %} {% load static %}
+
+    <div class="site-blocks-cover inner-page-cover overlay" style="background-image: url({% static 'images/pexels-pixabay-358319.jpg' %});" data-aos="fade" data-stellar-background-ratio="0.5">
+      <div class="container">
+        <div class="row align-items-center justify-content-center text-center">
+
+          <div class="col-md-8" data-aos="fade-up" data-aos-delay="400">
+            <h1 class="text-white font-weight-light text-uppercase font-weight-bold">Air Freight</h1>
+            <p class="text-white font-weight-light ">Respond to disruptions with a reliable solution that is faster, more frequent and predictable.</p>
+            <a href="{% url 'requests' %}" class="btn btn-primary text-white" type="button" id="button-addon2">Request Us</a>
+          </div>
+        </div>
+      </div>
+    </div>  
+
+   
+
+    <div class="site-section">
+      <div class="container">
+        <div class="row ">
+          
+          <div class="col-md-5 ml-auto mt-5 order-md-2" data-aos="fade">
+            <img src="{% static 'images/fly-through-the-speed-bumps_720x405.jpg' %} " alt="Image" class="img-fluid rounded">
+          </div>
+          <div class="col-md-6 mt-5" data-aos="fade">
+            <div class="text-left pb-1 border-primary mb-4">
+              <h2 class="text-primary">Taking agility and reliability to the next level</h2>
+            </div>
+            <p> Air Freight is expanding its fleet of aircraft to meet your need for more reliable and agile logistics. It allows you to swiftly transport your time-sensitive, high-value cargo to its destination, and fly past any supply chain disruptions that may arise from congested ports, labour shortage or strapped capacity.</p>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  
+    <div class="site-section">
+      <div class="container">
+        <div class="row justify-content-center mb-5">
+          <div class="col-md-7 text-center border-primary">
+            <h2 class="font-weight-light text-primary" data-aos="fade">More than just about speed</h2>
+          </div>
+        </div>
+        <div class="row align-items-center justify-content-center text-center">
+          <div class="col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
+            <div class="how-it-work-item">
+                <img src="{% static 'images/quick-response_pictogram_40x40.svg' %} " alt="Image" class="" style="width: 100px;">
+              <div class="how-it-work-body">
+                <h2 class="mt-3" style="color: black;">Respond to disruptions quicker</h2>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
+            <div class="how-it-work-item">
+                <img src="{% static 'images/cargo-timeline_pictogram_40x40.svg' %} " alt="Image" class="" style="width: 100px;">
+              <div class="how-it-work-body">
+                <h2 class="mt-3" style="color: black;">High reliability on cargo timelines</h2>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
+            <div class="how-it-work-item">
+                <img src="{% static 'images/cost-control_40x40.svg' %} " alt="Image" class="" style="width: 100px;">
+              <div class="how-it-work-body">
+                <h2 class="mt-3" style="color: black;">Improved flexibility and reduced inventory costs</h2>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="row justify-content-center my-5">
+            <div class="col-md-7 text-center border-primary">
+              <h2 class="font-weight-light text-primary" data-aos="fade">Air Charter is best suited for</h2>
+            </div>
+          </div>
+          <div class="row align-items-center justify-content-center text-center">
+            <div class="col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
+              <div class="how-it-work-item">
+                  <img src="{% static 'images/odd-size-cargo_pictogram_40x40.svg' %} " alt="Image" class="" style="width: 100px;">
+                <div class="how-it-work-body">
+                  <h2 class="mt-3" style="color: black;">Odd size cargo</h2>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
+              <div class="how-it-work-item">
+                  <img src="{% static 'images/time-sensitive_pictogram_40x40.svg' %} " alt="Image" class="" style="width: 100px;">
+                <div class="how-it-work-body">
+                  <h2 class="mt-3" style="color: black;">Time-sensitive cargo</h2>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
+              <div class="how-it-work-item">
+                  <img src="{% static 'images/dangerous-goods_40x40.svg' %} " alt="Image" class="" style="width: 100px;">
+                <div class="how-it-work-body">
+                  <h2 class="mt-3" style="color: black;">Dangerous cargo</h2>
+                </div>
+              </div>
+            </div>
+  
+          </div>
+      </div>
+    </div>
+
+    <div class="site-section border-bottom">
+        <div class="container">
+          <div class="row justify-content-center mb-5">
+            <div class="col-md-7 text-center border-primary">
+              <h2 class="font-weight-light text-primary" data-aos="fade">Cargo categories</h2>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-lg-3 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
+              <div class="person">
+                <img src="{% static 'images/dry-cargo_720x405.webp' %}"alt="Image" class="img-fluid rounded mb-3">
+                <h3>Dry Cargo</h3>
+                <p class="mb-4"> Dry cargo commodities - be it retail, auto or electronics parts, paper, and much more - are what we ship most of.</p>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
+              <div class="person">
+                <img src="{% static 'images/refrigerated-cargo-720x405_v2.jpg' %}" alt="Image" class="img-fluid rounded mb-3">
+                <h3>Refrigerated cargo</h3>
+                <p class="mb-4">Reliable, safe passage via an unbroken cold chain is essential to ensure that your goods arrive in the exact condition intended.</p>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
+              <div class="person">
+                <img src="{% static 'images/special-cargo_720x405.webp' %}" alt="Image" class="img-fluid rounded mb-3">
+                <h3>Special cargo</h3>
+                <p class="mb-4">At Maersk, we recognise that handling special cargo is different from traditional container shipping.</p>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="300">
+              <div class="person">
+                <img src="{% static 'images/dangerous-cargo_720x405.webp' %}" alt="Image" class="img-fluid rounded mb-3">
+                <h3>Dangerous cargo</h3>
+                <p class="mb-4">When it comes to transporting dangerous cargo, you need a partner you can rely on.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="site-section">
+        <div class="container">
+            <div class="row justify-content-center mx-auto">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-2" data-aos="fade">
+                            <img src="{% static 'images/find-schedules_pictogram_v2.svg' %} " alt="Image" class=""
+                                style="width: 80px;">
+                        </div>
+                        <div class="col-md-9">
+                            <h2 class="font-weight-light text-primary" data-aos="fade">Request Us</h2>
+                            <p> We're happy to talk to you about your air freight needs at anytime. Please get in touch with
+                                us.</p>
+                            <a href="{% url 'requests' %}" class="btn btn-primary text-white" type="button" id="button-addon2">Request</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-2" data-aos="fade">
+                            <img src="{% static 'images/headset_pictogram_v1.svg' %} " alt="Image" class=""
+                                style="width: 80px;">
+                        </div>
+                        <div class="col-md-10">
+                            <h2 class="font-weight-light text-primary" data-aos="fade">Contact Us</h2>
+                            <p> We're happy to talk to you about your air freight needs at anytime. Please get in touch with
+                                us.</p>
+                            <a href="{% url 'contact' %}" class="btn btn-primary text-white" type="button" id="button-addon2">Contact </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="site-section border-bottom">
+      <div class="container">
+
+        <div class="row justify-content-center mb-5">
+          <div class="col-md-7 text-center border-primary">
+            <h2 class="font-weight-light text-primary">Testimonials</h2>
+          </div>
+        </div>
+
+        <div class="slide-one-item home-slider owl-carousel">
+          <div>
+            <div class="testimonial">
+              <figure class="mb-4">
+                <img src="{% static 'images/person_3.jpg' %}" alt="Image" class="img-fluid mb-3">
+                <p>John Smith</p>
+              </figure>
+              <blockquote>
+                <p>&ldquo;Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur unde reprehenderit aperiam quaerat fugiat repudiandae explicabo animi minima fuga beatae illum eligendi incidunt consequatur. Amet dolores excepturi earum unde iusto.&rdquo;</p>
+              </blockquote>
+            </div>
+          </div>
+          <div>
+            <div class="testimonial">
+              <figure class="mb-4">
+                <img src="{% static 'images/person_2.jpg' %}" alt="Image" class="img-fluid mb-3">
+                <p>Christine Aguilar</p>
+              </figure>
+              <blockquote>
+                <p>&ldquo;Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur unde reprehenderit aperiam quaerat fugiat repudiandae explicabo animi minima fuga beatae illum eligendi incidunt consequatur. Amet dolores excepturi earum unde iusto.&rdquo;</p>
+              </blockquote>
+            </div>
+          </div>
+
+          <div>
+            <div class="testimonial">
+              <figure class="mb-4">
+                <img src="{% static 'images/person_4.jpg' %}" alt="Image" class="img-fluid mb-3">
+                <p>Robert Spears</p>
+              </figure>
+              <blockquote>
+                <p>&ldquo;Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur unde reprehenderit aperiam quaerat fugiat repudiandae explicabo animi minima fuga beatae illum eligendi incidunt consequatur. Amet dolores excepturi earum unde iusto.&rdquo;</p>
+              </blockquote>
+            </div>
+          </div>
+
+          <div>
+            <div class="testimonial">
+              <figure class="mb-4">
+                <img src="{% static 'images/person_5.jpg' %}" alt="Image" class="img-fluid mb-3">
+                <p>Bruce Rogers</p>
+              </figure>
+              <blockquote>
+                <p>&ldquo;Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur unde reprehenderit aperiam quaerat fugiat repudiandae explicabo animi minima fuga beatae illum eligendi incidunt consequatur. Amet dolores excepturi earum unde iusto.&rdquo;</p>
+              </blockquote>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    {% endblock %}
