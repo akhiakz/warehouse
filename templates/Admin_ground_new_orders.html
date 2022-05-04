@@ -14,17 +14,16 @@
                             <table class="table table-hover" id="myTable">
                                 <thead>
                                     <tr>
-                                        <th>id</th>
-                                        <th>Name</th>
-                                        <th>Company name</th>
-                                        <th>Product Line</th>
-                                        <th>Quantity</th>
-                                        <th>Payment</th>
-                                        <th>Shipment Date</th>
-                                        <th>from place</th>
-                                        <th>to place</th>
-                                        <th>Choose Staff</th>
-                                        <th>Action</th>
+                                      <th>id</th>
+                                      <th>Name</th>
+                                      <th>Company name</th>
+                                      <th>Product Line</th>
+                                      <th>Quantity</th>
+                                      <th>message</th>
+                                      <th>Shipment Date</th>
+                                      <th>from place</th>
+                                      <th>Choose Staff</th>
+                                      <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -37,10 +36,13 @@
                                         <td>{{i.companyname}}</td>
                                         <td>{{i.producttype}}</td>
                                         <td>{{i.quantity}}</td>
-                                        <td>{{i.rate}}</td>
+                                        <td>
+                                          <button type="button" class="btn btn-sm mx-1 text-light" style="background: #f89d13;"
+                                              data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                              <i class="mdi mdi-comment-multiple-outline"></i> Message </button>
+                                      </td>
                                         <td>{{i.shipmentdate}}</td>
                                         <td>{{i.from_place}}</td>
-                                        <td>{{i.to_place}}</td>
 
                                         <td>
                                           <select  class="btn badge-outline-dark btn-sm" name="staff">
@@ -66,6 +68,24 @@
         </div>
     </div>
 </div>
+
+{% for i in req %}
+<!-- message Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Messege</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{i.messege}}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- message Modal ends -->
+{% endfor %}
 
 <script>
     function myFunction() {

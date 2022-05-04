@@ -32,7 +32,7 @@
                                         <td>{{i.quantity}}</td>
                                         <td>
                                             <button type="button" class="btn text-light btn-sm mx-1" style="background: #f89d13;"
-                                                data-bs-toggle="modal" data-bs-target="#exampleModal">Reason </button>
+                                                data-bs-toggle="modal" data-bs-target="#exampleModal{{i.id}}">Reason </button>
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -47,7 +47,7 @@
 </div>
 {% for i in req %}
 <!-- Rejected Reason Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">

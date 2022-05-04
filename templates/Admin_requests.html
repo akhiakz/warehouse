@@ -1,4 +1,4 @@
-{%extends 'Admin_index.html'%} {% block content %} {% load static %}
+{%extends 'Staff_index.html'%} {% block content %} {% load static %}
 <div class="main-panel">
     <div class="content-wrapper">
         <div class="page-header">
@@ -23,7 +23,6 @@
                                         <th>message</th>
                                         <th>Shipment Date</th>
                                         <th>from place</th>
-                                        <th>to place</th>
                                         <th>Rate</th>
                                         <th>Action</th>
                                     </tr>
@@ -48,7 +47,6 @@
                                 
                                         <td>{{i.shipmentdate}}</td>
                                         <td>{{i.from_place}}</td>
-                                        <td>{{i.to_place}}</td>
                                         <td><input type="text" class="" name="rate" value="{{i.rate}}"
                                             style="border: 1px solid #f89d13; width: 150px;height: 35px; border-radius: 10px;padding-left: 15px;">
                                         </td>
@@ -69,7 +67,13 @@
                 </div>
             </div>
         </div>
-    </div>
+        {% if messages %}
+        {% for message in messages %}
+         {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+
+        {% endfor %}
+
+    {% endif %}
 </div>
 
 {% for i in req %}
@@ -105,7 +109,7 @@
                             <div class="row px-3">
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center">
                                 <textarea class="col-12 col-sm-12 col-md-12 col-lg-12 form-control"
-                                 name="reply" rows="8"></textarea>
+                                 name="reply" rows="8" required></textarea>
                             </div>
                         </div>
                         <br>

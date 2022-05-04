@@ -23,6 +23,7 @@
                                         <th>Shipment Date</th>
                                         <th>Shipment Type</th>
                                         <th>Status</th>
+                                        <th>Details</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -39,7 +40,8 @@
                                         <td> <div class="badge badge-outline-primary">
                                             {{i.shipment_status}} </div>
                                         </td>
-                                        
+                                        <td> <button type="button" class="btn text-light btn-sm" style="background: #f89d13;" data-bs-toggle="modal" data-bs-target="#exampleModal"> Details </button>
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -51,6 +53,24 @@
         </div>
     </div>
 </div>
+
+{% for i in req %}
+<!-- message Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Storage Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{i.tracking_status}}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- message Modal ends -->
+{% endfor %}
 
 <script>
     function myFunction() {

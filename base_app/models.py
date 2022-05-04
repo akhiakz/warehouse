@@ -57,6 +57,7 @@ class order_request(models.Model):
      shipment_status = models.CharField(max_length=255, null=True)
      expected_date = models.DateField(
         auto_now_add=False, auto_now=False,  null=True, blank=True)
+     storage = models.CharField(max_length=255, null=True)
      
 class payment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,null=True, blank=True)                        
@@ -66,3 +67,6 @@ class payment(models.Model):
     bank = models.CharField(max_length=240, null=True)
     accountnumber = models.CharField(max_length=240, null=True)
     ifse = models.CharField(max_length=240, null=True)
+
+class storage(models.Model):
+   space = models.CharField(max_length=255, null=True)

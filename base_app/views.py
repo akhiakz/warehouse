@@ -6,6 +6,8 @@ from django.contrib.auth.models import User, auth
 from datetime import datetime,date
 from django.db.models import Sum
 from django.core.mail import send_mail
+from django.db.models import Q
+
 
 
 from django.shortcuts import render, redirect
@@ -145,7 +147,6 @@ def requests_send(request):
 			req.quantity = request.POST.get('qty')
 			req.shipmentdate = request.POST.get('sdate')
 			req.from_place = request.POST.get('from')
-			req.to_place = request.POST.get('to')
 			req.messege = request.POST.get('msg')
 			req.user_id = usr_id
 			req.status = 'pending'
@@ -176,6 +177,7 @@ def confirm_order(request,id):
 	if request.method == 'POST':            
 		req = order_request.objects.get(id=id)
 		req.status='confirmed'
+		req.shipment_status = 'pending'
 		req.save()
 		pay = payment()
 		pay.bank = request.POST.get('bankname')
@@ -195,7 +197,7 @@ def orders(request):
 		else:
 			variable = "dummy"
 		pro = User.objects.filter(id=usr_id)
-		req = order_request.objects.filter(user_id=usr_id).order_by('-id')
+		req = order_request.objects.filter(Q(user_id=usr_id) | Q(status='confirmed')).order_by('-id')
 		return render(request, 'orders.html',{'pro':pro,'req':req})
 	else:
 		return redirect('/')
@@ -219,39 +221,18 @@ def Admin_index(request):
 	return render(request, 'Admin_index.html')
 
 def Admin_dashboard(request):
-	ncount = order_request.objects.filter(status = 'confirmed').count()
-	anum = order_request.objects.filter(status = 'assigned').count()
+	anum = order_request.objects.filter(status = 'confirmed').count()
 	rnum = order_request.objects.filter(status = 'rejected').count()
-	return render(request, 'Admin_dashboard.html',{'anum':anum, 'ncount':ncount, 'rnum':rnum})
-
-def Admin_requests(request):
-	req =order_request.objects.filter(status='pending').order_by('-id')
-	return render(request, 'Admin_requests.html',{'req':req})
-
-def request_accept(request,id):
-	req = order_request.objects.get(id=id)
-	if request.method == 'POST':
-		req.status = "accepted"
-		req.rate = request.POST.get('rate')
-		req.save()
-	return redirect('Admin_requests')
-
-def request_reject(request,id):
-	if request.method == 'POST':            
-		req = order_request.objects.get(id=id)
-		req.reject_reason=request.POST.get('reply')
-		req.status='rejected'
-		req.save()
-	return redirect('Admin_requests')
+	return render(request, 'Admin_dashboard.html',{'anum':anum, 'rnum':rnum})
 
 def Admin_neworder_dptcard(request):
-	anum = order_request.objects.filter(tranporttype ='Air Freight').filter(status = 'confirmed').filter(staff__isnull=True).count()
-	snum = order_request.objects.filter(tranporttype ='Ocean Freight').filter(status = 'confirmed').filter(staff__isnull=True).count()
-	gnum = order_request.objects.filter(tranporttype ='Ground shipment').filter(status = 'confirmed').filter(staff__isnull=True).count()
+	anum = order_request.objects.filter(tranporttype ='Air Freight').filter(status = 'pending').count()
+	snum = order_request.objects.filter(tranporttype ='Ocean Freight').filter(status = 'pending').count()
+	gnum = order_request.objects.filter(tranporttype ='Ground shipment').filter(status = 'pending').count()
 	return render(request, 'Admin_neworder_dptcard.html',{'anum':anum,'snum':snum, 'gnum':gnum})
 
 def Admin_air_new_orders(request):
-	req = order_request.objects.filter(tranporttype ='Air Freight').filter(status = 'confirmed').filter(staff__isnull=True)
+	req = order_request.objects.filter(tranporttype ='Air Freight').filter(status = 'pending')
 	staff = staff_registration.objects.all()
 	return render(request, 'Admin_air_new_orders.html',{'req':req,'staff':staff})
 
@@ -260,12 +241,11 @@ def staff_assign_air(request,id):
 		req = order_request.objects.get(id=id)
 		req.staff_id=request.POST.get('staff')
 		req.status = 'assigned'
-		req.shipment_status = 'pending'
 		req.save()
 	return redirect('Admin_air_new_orders')
 
 def Admin_ship_new_orders(request):
-	req = order_request.objects.filter(tranporttype ='Ocean Freight').filter(status = 'confirmed').filter(staff__isnull=True)
+	req = order_request.objects.filter(tranporttype ='Ocean Freight').filter(status = 'pending')
 	staff = staff_registration.objects.all()
 	return render(request, 'Admin_ship_new_orders.html',{'req':req,'staff':staff})
 
@@ -274,12 +254,11 @@ def staff_assign_ship(request,id):
 		req = order_request.objects.get(id=id)
 		req.staff_id=request.POST.get('staff')
 		req.status = 'assigned'
-		req.shipment_status = 'pending'
 		req.save()
 	return redirect('Admin_ship_new_orders')
 
 def Admin_ground_new_orders(request):
-	req = order_request.objects.filter(tranporttype ='Ground shipment').filter(status = 'confirmed').filter(staff__isnull=True)
+	req = order_request.objects.filter(tranporttype ='Ground shipment').filter(status = 'pending')
 	staff = staff_registration.objects.all()
 	return render(request, 'Admin_ground_new_orders.html',{'req':req,'staff':staff})
 
@@ -288,18 +267,19 @@ def staff_assign_ground(request,id):
 		req = order_request.objects.get(id=id)
 		req.staff_id=request.POST.get('staff')
 		req.status = 'assigned'
-		req.shipment_status = 'pending'
 		req.save()
 	return redirect('Admin_ground_new_orders')
 
 def Admin_statics(request):
-	torder = order_request.objects.filter(status = 'assigned').count()
+	torder = order_request.objects.filter(status = 'confirmed').count()
 	tpay = payment.objects.aggregate(Sum('payment'))['payment__sum']
 	tuser = User.objects.all().count()
-	return render(request, 'Admin_statics.html',{'torder':torder,'tpay':tpay, 'tuser':tuser})
+	str = storage.objects.all()
+	tq = order_request.objects.exclude(Q(status='pending') | Q(status='rejected')).aggregate(Sum('quantity'))['quantity__sum']
+	return render(request, 'Admin_statics.html',{'torder':torder,'tpay':tpay, 'tuser':tuser,'str':str,'tq':tq})
 
 def Admin_accepted_orders(request):
-	req = order_request.objects.filter(status = 'assigned')
+	req = order_request.objects.filter(status = 'confirmed').order_by('-id')
 	return render(request, 'Admin_accepted_orders.html',{'req':req})
 
 def Admin_rejected_orders(request):
@@ -354,6 +334,21 @@ def dpt_save(request):
 		dpt.save()
 	return redirect('Admin_departments')
 
+# def Admin_storage(request):
+# 	str = storage.objects.all()
+# 	return render(request, 'Admin_storage.html',{'str':str})
+
+# def Admin_create_storage(request):
+# 	return render(request, 'Admin_create_storage.html')
+
+# def storage_save(request):
+# 	if request.method == 'POST':
+# 		str = storage()
+# 		str.storage_type = request.POST.get('stype')
+# 		str.space = request.POST.get('tspace')
+# 		str.save()
+# 	return redirect('Admin_storage')
+
 #############   Admin module ################
 
 ##### staff module #####
@@ -368,6 +363,39 @@ def Staff_index(request):
 		return render(request, 'Staff_index.html',{'mem1':mem1})
 	else:
 		return redirect('login')
+
+def Admin_requests(request):
+	if 'stf_id' in request.session:
+		if request.session.has_key('stf_id'):
+			stf_id = request.session['stf_id']
+		else:
+			variable = "dummy"
+		mem1 = staff_registration.objects.filter(id = stf_id)
+		req =order_request.objects.filter(staff_id = stf_id).filter(status='assigned').order_by('-id')
+		return render(request, 'Admin_requests.html',{ 'mem1':mem1, 'req':req })
+	else:
+		return redirect('login')
+
+def request_accept(request,id):
+	req = order_request.objects.get(id=id)
+	if request.method == 'POST':
+		req.status = "accepted"
+		req.rate = request.POST.get('rate')
+		str = storage.objects.aggregate(Sum('space'))['space__sum']
+		tq = order_request.objects.exclude(Q(status='pending') | Q(status='rejected')).aggregate(Sum('quantity'))['quantity__sum']
+		if ( str > tq):
+			req.save()
+		else:
+			messages.success(request, 'Storage can not store this much quantity')
+	return redirect( 'Admin_requests')
+
+def request_reject(request,id):
+	if request.method == 'POST':            
+		req = order_request.objects.get(id=id)
+		req.reject_reason=request.POST.get('reply')
+		req.status='rejected'
+		req.save()
+	return redirect('Admin_requests')
 
 def Staff_account_settings(request):
 	if 'stf_id' in request.session:
@@ -387,6 +415,7 @@ def staff_acc_save(request, id):
 		stf.dateofbirth = request.POST.get('dob')
 		stf.email = request.POST.get('email')
 		stf.mobile = request.POST.get('contact')
+		stf.password = request.POST.get('ps')
 		stf.address1 = request.POST.get('ad1')
 		stf.address2 = request.POST.get('ad2')
 		stf.State = request.POST.get('state')
@@ -439,8 +468,16 @@ def Staff_completed_orders(request):
 		return redirect('login')
 
 def Staff_tracking_update(request,id):
-	req = order_request.objects.get(id = id)
-	return render(request, 'Staff_tracking_update.html',{'req':req})
+	if 'stf_id' in request.session:
+		if request.session.has_key('stf_id'):
+			stf_id = request.session['stf_id']
+		else:
+			variable = "dummy"
+		mem1 = staff_registration.objects.filter(id = stf_id)
+		req = order_request.objects.get(id = id)
+		return render(request, 'Staff_tracking_update.html',{'req':req,'mem1':mem1})
+	else:
+		return redirect('login')
 
 def Staff_tracking_update_save(request,id):
 	if request.method == 'POST':
@@ -450,6 +487,19 @@ def Staff_tracking_update_save(request,id):
 		req.save()
 	return redirect('Staff_orders')
 
+
+def Staff_statics(request):
+	if 'stf_id' in request.session:
+		if request.session.has_key('stf_id'):
+			stf_id = request.session['stf_id']
+		else:
+			variable = "dummy"
+		mem1 = staff_registration.objects.filter(id = stf_id)
+		str = storage.objects.all()
+		tq = order_request.objects.exclude(Q(status='pending') | Q(status='rejected')).aggregate(Sum('quantity'))['quantity__sum']
+		return render(request, 'Staff_statics.html',{'str':str,'tq':tq,'mem1':mem1})
+	else:
+		return redirect('login')
 
 
 

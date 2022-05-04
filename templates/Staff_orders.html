@@ -21,7 +21,7 @@
                                         <th>Quantity</th>
                                         <th>payment</th>
                                         <th>Shipment Date</th>
-                                        <th>Shipment Type</th>
+                                        <th>From Place</th>
                                         <th>Update</th>
                                     </tr>
                                 </thead>
@@ -35,7 +35,7 @@
                                         <td>{{i.quantity}}</td>
                                         <td>{{i.rate}}</td>
                                         <td>10/09/2022</td>
-                                        <td>{{i.tranporttype}}</td>
+                                        <td>{{i.from_place}}</td>
                                         <td> <a href="{% url 'Staff_tracking_update' i.id %}" class="btn btn-primary btn-sm">
                                             <i class="mdi mdi-checkbox-marked-outline"></i> Update </a>
                                         </td>

@@ -35,9 +35,6 @@ urlpatterns = [
 
     path('Admin_index/', views.Admin_index, name='Admin_index'),
     path('Admin_dashboard/', views.Admin_dashboard, name='Admin_dashboard'),
-    path('Admin_requests/', views.Admin_requests, name='Admin_requests'),
-    path('request_accept/<int:id>', views.request_accept, name='request_accept'),
-    path('request_reject/<int:id>', views.request_reject, name='request_reject'),
     path('Admin_neworder_dptcard/', views.Admin_neworder_dptcard, name='Admin_neworder_dptcard'),
     path('Admin_air_new_orders/', views.Admin_air_new_orders, name='Admin_air_new_orders'),
     path('staff_assign_air/<int:id>', views.staff_assign_air, name='staff_assign_air'),
@@ -57,6 +54,9 @@ urlpatterns = [
     path('Admin_departments/', views.Admin_departments, name='Admin_departments'),
     path('Admin_create_departments/', views.Admin_create_departments, name='Admin_create_departments'),
     path('dpt_save/', views.dpt_save, name='dpt_save'),
+    # path('Admin_storage/', views.Admin_storage, name='Admin_storage'),
+    # path('Admin_create_storage/', views.Admin_create_storage, name='Admin_create_storage'),
+    # path('storage_save/', views.storage_save, name='storage_save'),
 
 
 #############   Admin module ends ################
@@ -72,6 +72,10 @@ urlpatterns = [
     path('Staff_completed_orders/', views.Staff_completed_orders, name='Staff_completed_orders'),
     path('Staff_tracking_update/<int:id>', views.Staff_tracking_update, name='Staff_tracking_update'),
     path('Staff_tracking_update_save/<int:id>', views.Staff_tracking_update_save, name='Staff_tracking_update_save'),
+    path('Admin_requests/', views.Admin_requests, name='Admin_requests'),
+    path('request_accept/<int:id>', views.request_accept, name='request_accept'),
+    path('request_reject/<int:id>', views.request_reject, name='request_reject'),
+    path('Staff_statics/', views.Staff_statics, name='Staff_statics'),
 
 #############   Staff module ends ################
 ]
