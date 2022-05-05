@@ -5,58 +5,56 @@
 <div class="site-section bg-light">
   <div class="container">
     <div class="row">
-      <div class="col-md-12">
-        <div class="row">
-          {% for i in req %}
-          {% if i.shipment_status == 'pending' %}
-          <div class="col-md-6 grid-margin stretch-card">
-            <h4 class="mb-3">Pending Orders</h4>
-            <div class="card mb-3">
-              <div class="card-body">
-                <div class="d-sm-flex flex-row flex-wrap text-center text-sm-left align-items-center mr-5">
-                  <img src="{% static 'admin/assets/images/faces/truck.jpg' %}" class="img-lg rounded"
-                    alt="profile image" />
-                  <div class="ms-sm-3 ms-md-0 ms-xl-3 mt-2 mt-sm-0 mt-md-2 mt-xl-0 ml-4">
-                    
-                    <h5 class="mb-0">{{i.companyname}}</h5>
-                    <p class="text-muted mb-1">{{i.producttype}} product</p>
-                    <p class="mb-0">your shipping is in progress </p>
-                    <button type="button" class="btn btn-primary btn-sm m-2" data-toggle="modal"
-                      data-target="#exampleModal{{i.id}}"> Track </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {% endif %}
-          {% endfor %}
+      <div class="col-lg-6 col-md-6">
+        <h2 class="mb-3 ml-3 text-primary">Pending Orders</h2>
+        {% for i in req %}
+        {% if i.shipment_status == 'pending' %}
+        <div class="col-md-12 grid-margin stretch-card">
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-sm-flex flex-row flex-wrap text-center text-sm-left align-items-center mr-5">
+                <img src="{% static 'admin/assets/images/faces/truck.jpg' %}" class="img-lg rounded"
+                  alt="profile image" />
+                <div class="ms-sm-3 ms-md-0 ms-xl-3 mt-2 mt-sm-0 mt-md-2 mt-xl-0 ml-4">
 
-          {% for i in req %}
-          {% if i.shipment_status == 'Success' %}
-          
-          <div class="col-md-6 grid-margin stretch-card">
-            <h4 class="mb-3">completed Orders</h4>
-            <div class="card mb-5">
-              <div class="card-body mb-3 mt-2">
-                <div class="d-sm-flex flex-row flex-wrap text-center text-sm-left align-items-center mr-5">
-                  <img src="{% static 'admin/assets/images/faces/truck.jpg' %}" class="img-lg rounded"
-                    alt="profile image" />
-                  <div class="ms-sm-3 ms-md-0 ms-xl-3 mt-2 mt-sm-0 mt-md-2 mt-xl-0 ml-4">
-                    <h5 class="mb-0">{{i.companyname}}</h5>
-                    <p class="text-muted mb-1">{{i.producttype}} product</p>
-                    <div class="mb-0" data-toggle="modal"
-                      data-target="#exampleModal{{i.id}}"
-                      style="border: 1px solid rgb(105, 220, 105); padding: 3px 10px; border-radius: 10px; color:rgb(105, 220, 105) ;">
-                      shipment Success</div>
-                      
-                  </div>
+                  <h5 class="mb-0">{{i.companyname}}</h5>
+                  <p class="text-muted mb-1">{{i.producttype}} product</p>
+                  <p class="mb-0">your shipping is in progress </p>
+                  <button type="button" class="btn btn-primary btn-sm m-2" data-toggle="modal"
+                    data-target="#exampleModal{{i.id}}"> Track </button>
                 </div>
               </div>
             </div>
           </div>
-          {% endif %}
-          {% endfor %}
         </div>
+        {% endif %}
+          {% endfor %}
+      </div>
+
+      <div class="col-lg-6 col-md-6">
+      <h2 class="mb-3 ml-3 text-primary">completed Orders</h2>
+      {% for i in req %}
+          {% if i.shipment_status == 'Success' %}
+        <div class="col-md-12 grid-margin stretch-card">
+          <div class="card mb-5">
+            <div class="card-body ">
+              <div class="d-sm-flex flex-row flex-wrap text-center text-sm-left align-items-center mr-5">
+                <img src="{% static 'admin/assets/images/faces/truck.jpg' %}" class="img-lg rounded"
+                  alt="profile image" />
+                <div class="ms-sm-3 ms-md-0 ms-xl-3 mt-2 mt-sm-0 mt-md-2 mt-xl-0 ml-4">
+                  <h5 class="mb-0">{{i.companyname}}</h5>
+                  <p class="text-muted mb-1">{{i.producttype}} product</p>
+                  <div class="mb-0" data-toggle="modal" data-target="#exampleModal{{i.id}}"
+                    style="border: 1px solid rgb(105, 220, 105); padding: 3px 10px; border-radius: 10px; color:rgb(105, 220, 105) ;">
+                    shipment Success</div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+          {% endfor %}
       </div>
     </div>
   </div>

@@ -170,8 +170,16 @@ def status(request):
 		return redirect('/')	
 
 def order_confirmation(request,id):
-	req = order_request.objects.get(id=id)
-	return render(request, 'order_confirmation.html',{'req':req})
+	if 'usr_id' in request.session:
+		if request.session.has_key('usr_id'):
+			usr_id = request.session['usr_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=usr_id)
+		req = order_request.objects.get(id=id)
+		return render(request, 'order_confirmation.html',{'req':req,'pro':pro})
+	else:
+		return redirect('/')	
 
 def confirm_order(request,id):
 	if request.method == 'POST':            
@@ -275,7 +283,7 @@ def Admin_statics(request):
 	tpay = payment.objects.aggregate(Sum('payment'))['payment__sum']
 	tuser = User.objects.all().count()
 	str = storage.objects.all()
-	tq = order_request.objects.exclude(Q(status='pending') | Q(status='rejected')).aggregate(Sum('quantity'))['quantity__sum']
+	tq = order_request.objects.filter(Q(shipment_status='pending') | Q(shipment_status='Success')).aggregate(Sum('quantity'))['quantity__sum']
 	return render(request, 'Admin_statics.html',{'torder':torder,'tpay':tpay, 'tuser':tuser,'str':str,'tq':tq})
 
 def Admin_accepted_orders(request):
@@ -371,7 +379,7 @@ def Admin_requests(request):
 		else:
 			variable = "dummy"
 		mem1 = staff_registration.objects.filter(id = stf_id)
-		req =order_request.objects.filter(staff_id = stf_id).filter(status='assigned').order_by('-id')
+		req =order_request.objects.filter(staff_id=stf_id).filter(status='assigned').order_by('-id')
 		return render(request, 'Admin_requests.html',{ 'mem1':mem1, 'req':req })
 	else:
 		return redirect('login')
@@ -382,8 +390,10 @@ def request_accept(request,id):
 		req.status = "accepted"
 		req.rate = request.POST.get('rate')
 		str = storage.objects.aggregate(Sum('space'))['space__sum']
-		tq = order_request.objects.exclude(Q(status='pending') | Q(status='rejected')).aggregate(Sum('quantity'))['quantity__sum']
-		if ( str > tq):
+		tq = order_request.objects.filter(Q(shipment_status='pending') | Q(shipment_status='Success')).aggregate(Sum('quantity'))['quantity__sum']
+		cq = order_request.objects.filter(id=id).aggregate(Sum('quantity'))['quantity__sum']
+		gt = (tq + cq)
+		if ( str > gt):
 			req.save()
 		else:
 			messages.success(request, 'Storage can not store this much quantity')
@@ -496,7 +506,7 @@ def Staff_statics(request):
 			variable = "dummy"
 		mem1 = staff_registration.objects.filter(id = stf_id)
 		str = storage.objects.all()
-		tq = order_request.objects.exclude(Q(status='pending') | Q(status='rejected')).aggregate(Sum('quantity'))['quantity__sum']
+		tq = order_request.objects.filter(Q(shipment_status='pending') | Q(shipment_status='Success')).aggregate(Sum('quantity'))['quantity__sum']
 		return render(request, 'Staff_statics.html',{'str':str,'tq':tq,'mem1':mem1})
 	else:
 		return redirect('login')
