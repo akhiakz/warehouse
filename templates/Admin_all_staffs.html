@@ -35,23 +35,8 @@
                                         <td>{{i.mobile}}</td>
                                         <td>{{i.department.department_name}}</td>
                                         <td>{{i.salary}}</td>
-                                       
-                                        <!-- <td>
-                                            <select  class="btn badge-outline-dark btn-sm">
-                                              <option hidden value="">{{i.department.department_name}}</option>
-                                              <option>Ocean Freight</option>
-                                            </select>
-                                        </td> 
-                                        <td><input type="text" class="" name="rate" value="{{i.salary}}"
-                                            style="border: 1px solid #4B49AC; width: 120px;height: 35px; border-radius: 10px;padding-left: 15px;">
-                                        </td> -->
                                         <td>{{i.joiningdate}}</td>
                                         <td>{{i.status}}</td>
-                                        <!-- <td>
-                                            <select  class="btn badge-outline-dark btn-sm">
-                                              <option selected hidden >Active</option>
-                                              <option>Resign</option>
-                                            </select> -->
                                         </td>                                       
                                         <td><a href="{% url 'staff_delete' i.id %}" class="btn btn-sm text-light" style="background: rgb(220, 50, 50);">
                                             <i class="mdi mdi-close-box-outline"></i> Delete </a>
@@ -68,7 +53,11 @@
     </div>
 </div>
 
-
+{% if messages %}
+{% for message in messages %}
+ {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+{% endfor %}
+{% endif %}
 
 <script>
     function myFunction() {

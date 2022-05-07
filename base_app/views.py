@@ -6,7 +6,9 @@ from django.contrib.auth.models import User, auth
 from datetime import datetime,date
 from django.db.models import Sum
 from django.core.mail import send_mail
+from warehouse.settings import EMAIL_HOST_USER
 from django.db.models import Q
+import random
 
 
 
@@ -21,6 +23,53 @@ def base(request):
 
 def index(request):
 	return render(request, 'index.html')
+
+def Change_password(request):
+	if 'usr_id' in request.session:
+		if request.session.has_key('usr_id'):
+			usr_id = request.session['usr_id']
+		users = User.objects.filter(id=usr_id)
+		if request.method == 'POST':
+
+			newPassword = request.POST.get('newPassword')
+			confirmPassword = request.POST.get('confirmPassword')
+
+			user = User.objects.get(id=usr_id)
+			if newPassword == confirmPassword:
+				user.set_password(newPassword)
+				user.save()
+				msg_success = "Password has been changed successfully"
+				return render(request, 'Change_password.html', {'msg_success': msg_success})
+			else:
+				msg_error = "Password does not match"
+				return render(request, 'Change_password.html', {'msg_error': msg_error})
+		return render(request, 'Change_password.html', {'users': users})
+	else:
+		return redirect('/')
+
+def forgot_password(request):
+	if request.method == "POST":
+		email_id = request.POST.get('email')
+		access_staff_data = staff_registration.objects.filter(email=email_id).exists()
+		if access_staff_data:
+			_staff = staff_registration.objects.filter(email=email_id)
+			password = random.SystemRandom().randint(100000, 999999)
+			print(password)
+			_staff.update(password = password)
+			subject =' your authentication data updated'
+			message = 'Password Reset Successfully\n\nYour login details are below\n\nUsername : ' + str(email_id) + '\n\nPassword : ' + str(password) + \
+                '\n\nYou can login this details\n\nNote: This is a system generated email, do not reply to this email id'
+			email_from = settings.EMAIL_HOST_USER
+			recipient_list = [email_id, ]
+			send_mail(subject, message, email_from,
+                      recipient_list, fail_silently=True)
+            # _user.save()
+			msg_success = "Password Reset successfully check your mail new password"
+			return render(request, 'forgot_password.html', {'msg_success': msg_success})
+		else:
+			msg_error = "This email does not exist  "
+			return render(request, 'forgot_password.html', {'msg_error': msg_error})
+	return render(request, 'forgot_password.html')
 
 def login(request):
 	return render(request, 'login.html')
@@ -40,7 +89,7 @@ def loginpage(request):
         if user.is_superuser:
             request.session['Ad_id']=user.id
             auth.login(request, user)
-            return redirect('Admin_index')
+            return redirect('Admin_dashboard')
         elif user is not None:
             request.session['usr_id']=user.id
             auth.login(request, user)
@@ -62,6 +111,7 @@ def signuppage(request):
 		username = request.POST['username']
 		password = request.POST['password']
 		cpassword = request.POST['cpassword']
+		email = request.POST['email']
 		
 		
 		if password == cpassword:
@@ -69,7 +119,7 @@ def signuppage(request):
 				messages.info(request, 'This username already exists. Sign up again')
 				return redirect('signup')
 			else:
-				user = User.objects.create_user(first_name=firstname, last_name=lastname, username=username, password=password)
+				user = User.objects.create_user(first_name=firstname, last_name=lastname, username=username, password=password, email=email)
 				user.save()
 				print('hello')
 				return redirect('login')
@@ -80,9 +130,14 @@ def signuppage(request):
 		messages.info(request, 'Oops....Something went wrong.')
 		return redirect('signup')
 
+def Admin_logout(request):
+	if 'Ad_id' in request.session:
+		auth.logout(request)
+		return redirect('login')
+
 def logout(request):
-    auth.logout(request)
-    return redirect('index')
+		auth.logout(request)
+		return redirect('index')
 
 def staff_logout(request):
     if 'stf_id' in request.session:  
@@ -101,21 +156,26 @@ def services(request):
 def contact(request):
 	return render(request, 'contact.html')
 
-def sendmail(request):
-    if request.method == 'POST':
-        message_name = request.POST['message_name']
-        message_email = request.POST['message_email']
-        message = request.POST['message']
-        print(message_name, message_email, message)
-        send_mail(
-            message_name, #subject
-            message, #message
-            message_email, #from email
-            ['demo@gmail.com'] #to emails
-        )
-        return redirect('contact')
-    else:
-        return redirect('contact')
+def contactus_save(request):
+	if 'usr_id' in request.session:
+		if request.session.has_key('usr_id'):
+			usr_id = request.session['usr_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=usr_id)
+		if request.method == 'POST':
+			cou = contact_us()
+			cou.firstname = request.POST.get('fname')
+			cou.lastname = request.POST.get('lname')
+			cou.email = request.POST.get('email')
+			cou.subject = request.POST.get('sub')
+			cou.message = request.POST.get('msg')
+			cou.user_id = usr_id
+			cou.replay_status = 0
+			cou.save()	
+			messages.success(request, 'Success')
+		return redirect('contact')
+	
 
 def requests(request):
 	if 'usr_id' in request.session:
@@ -151,6 +211,7 @@ def requests_send(request):
 			req.user_id = usr_id
 			req.status = 'pending'
 			req.save()
+			messages.success(request, 'Success')
 		return redirect( 'requests' )	
 	else:
 		return redirect('/')
@@ -226,23 +287,82 @@ def Warehousing(request):
 #############   Admin module ################
 
 def Admin_index(request):
-	return render(request, 'Admin_index.html')
+	if 'Ad_id' in request.session:
+		if request.session.has_key('Ad_id'):
+			Ad_id = request.session['Ad_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=Ad_id)
+		return render(request, 'Admin_index.html',{'pro':pro})
+	else:
+		return redirect('login')
+
+def Admin_changepassword(request):
+	if 'Ad_id' in request.session:
+		if request.session.has_key('Ad_id'):
+			Ad_id = request.session['Ad_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=Ad_id)
+		return render(request,'Admin_changepassword.html',{'pro':pro})
+	else:
+		return redirect('login')
+
+def Admin_changepwd_save(request):
+	if request.method == 'POST':
+		newPassword = request.POST.get('newPassword')
+		confirmPassword = request.POST.get('confirmPassword')
+
+		user = User.objects.get(is_superuser=True)
+		if newPassword == confirmPassword:
+			user.set_password(newPassword)
+			user.save()
+			msg_success = "Password has been changed successfully"
+			return render(request, 'Admin_dashboard.html', {'msg_success': msg_success})
+		else:
+			msg_error = "Password does not match"
+			return render(request, 'Admin_changepassword.html', {'msg_error': msg_error})
+	return render(request,'Admin_changepassword.html')
 
 def Admin_dashboard(request):
-	anum = order_request.objects.filter(status = 'confirmed').count()
-	rnum = order_request.objects.filter(status = 'rejected').count()
-	return render(request, 'Admin_dashboard.html',{'anum':anum, 'rnum':rnum})
+	if 'Ad_id' in request.session:
+		if request.session.has_key('Ad_id'):
+			Ad_id = request.session['Ad_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=Ad_id)
+		anum = order_request.objects.filter(status = 'confirmed').count()
+		rnum = order_request.objects.filter(status = 'rejected').count()
+		return render(request, 'Admin_dashboard.html',{'anum':anum, 'rnum':rnum,'pro':pro})
+	else:
+		return redirect('login')
 
 def Admin_neworder_dptcard(request):
-	anum = order_request.objects.filter(tranporttype ='Air Freight').filter(status = 'pending').count()
-	snum = order_request.objects.filter(tranporttype ='Ocean Freight').filter(status = 'pending').count()
-	gnum = order_request.objects.filter(tranporttype ='Ground shipment').filter(status = 'pending').count()
-	return render(request, 'Admin_neworder_dptcard.html',{'anum':anum,'snum':snum, 'gnum':gnum})
+	if 'Ad_id' in request.session:
+		if request.session.has_key('Ad_id'):
+			Ad_id = request.session['Ad_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=Ad_id)
+		anum = order_request.objects.filter(tranporttype ='Air Freight').filter(status = 'pending').count()
+		snum = order_request.objects.filter(tranporttype ='Ocean Freight').filter(status = 'pending').count()
+		gnum = order_request.objects.filter(tranporttype ='Ground shipment').filter(status = 'pending').count()
+		return render(request, 'Admin_neworder_dptcard.html',{'anum':anum,'snum':snum, 'gnum':gnum,'pro':pro})
+	else:
+		return redirect('login')
 
 def Admin_air_new_orders(request):
-	req = order_request.objects.filter(tranporttype ='Air Freight').filter(status = 'pending')
-	staff = staff_registration.objects.all()
-	return render(request, 'Admin_air_new_orders.html',{'req':req,'staff':staff})
+	if 'Ad_id' in request.session:
+		if request.session.has_key('Ad_id'):
+			Ad_id = request.session['Ad_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=Ad_id)
+		req = order_request.objects.filter(tranporttype ='Air Freight').filter(status = 'pending')
+		staff = staff_registration.objects.all()
+		return render(request, 'Admin_air_new_orders.html',{'req':req,'staff':staff,'pro':pro})
+	else:
+		return redirect('login')
 
 def staff_assign_air(request,id):
 	if request.method == 'POST':            
@@ -250,12 +370,21 @@ def staff_assign_air(request,id):
 		req.staff_id=request.POST.get('staff')
 		req.status = 'assigned'
 		req.save()
+		messages.success(request, 'order assigned to the staff successfully')
 	return redirect('Admin_air_new_orders')
 
 def Admin_ship_new_orders(request):
-	req = order_request.objects.filter(tranporttype ='Ocean Freight').filter(status = 'pending')
-	staff = staff_registration.objects.all()
-	return render(request, 'Admin_ship_new_orders.html',{'req':req,'staff':staff})
+	if 'Ad_id' in request.session:
+		if request.session.has_key('Ad_id'):
+			Ad_id = request.session['Ad_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=Ad_id)
+		req = order_request.objects.filter(tranporttype ='Ocean Freight').filter(status = 'pending')
+		staff = staff_registration.objects.all()
+		return render(request, 'Admin_ship_new_orders.html',{'req':req,'staff':staff,'pro':pro})
+	else:
+		return redirect('login')
 
 def staff_assign_ship(request,id):
 	if request.method == 'POST':            
@@ -263,12 +392,21 @@ def staff_assign_ship(request,id):
 		req.staff_id=request.POST.get('staff')
 		req.status = 'assigned'
 		req.save()
+		messages.success(request, 'order assigned to the staff successfully')
 	return redirect('Admin_ship_new_orders')
 
 def Admin_ground_new_orders(request):
-	req = order_request.objects.filter(tranporttype ='Ground shipment').filter(status = 'pending')
-	staff = staff_registration.objects.all()
-	return render(request, 'Admin_ground_new_orders.html',{'req':req,'staff':staff})
+	if 'Ad_id' in request.session:
+		if request.session.has_key('Ad_id'):
+			Ad_id = request.session['Ad_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=Ad_id)
+		req = order_request.objects.filter(tranporttype ='Ground shipment').filter(status = 'pending')
+		staff = staff_registration.objects.all()
+		return render(request, 'Admin_ground_new_orders.html',{'req':req,'staff':staff,'pro':pro})
+	else:
+		return redirect('login')
 
 def staff_assign_ground(request,id):
 	if request.method == 'POST':            
@@ -276,31 +414,72 @@ def staff_assign_ground(request,id):
 		req.staff_id=request.POST.get('staff')
 		req.status = 'assigned'
 		req.save()
+		messages.success(request, 'order assigned to the staff successfully')
 	return redirect('Admin_ground_new_orders')
 
 def Admin_statics(request):
-	torder = order_request.objects.filter(status = 'confirmed').count()
-	tpay = payment.objects.aggregate(Sum('payment'))['payment__sum']
-	tuser = User.objects.all().count()
-	str = storage.objects.all()
-	tq = order_request.objects.filter(Q(shipment_status='pending') | Q(shipment_status='Success')).aggregate(Sum('quantity'))['quantity__sum']
-	return render(request, 'Admin_statics.html',{'torder':torder,'tpay':tpay, 'tuser':tuser,'str':str,'tq':tq})
+	if 'Ad_id' in request.session:
+		if request.session.has_key('Ad_id'):
+			Ad_id = request.session['Ad_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=Ad_id)
+		torder = order_request.objects.filter(status = 'confirmed').count()
+		tpay = payment.objects.aggregate(Sum('payment'))['payment__sum']
+		tuser = User.objects.all().count()
+		str = storage.objects.all()
+		tq = order_request.objects.filter(Q(shipment_status='pending') | Q(shipment_status='Success')).aggregate(Sum('quantity'))['quantity__sum']
+		return render(request, 'Admin_statics.html',{'torder':torder,'tpay':tpay, 'tuser':tuser,'str':str,'tq':tq,'pro':pro})
+	else:
+		return redirect('login')
 
 def Admin_accepted_orders(request):
-	req = order_request.objects.filter(status = 'confirmed').order_by('-id')
-	return render(request, 'Admin_accepted_orders.html',{'req':req})
+	if 'Ad_id' in request.session:
+		if request.session.has_key('Ad_id'):
+			Ad_id = request.session['Ad_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=Ad_id)
+		req = order_request.objects.filter(status = 'confirmed').order_by('-id')
+		return render(request, 'Admin_accepted_orders.html',{'req':req,'pro':pro})
+	else:
+		return redirect('login')
 
 def Admin_rejected_orders(request):
-	req = order_request.objects.filter(status = 'rejected')
-	return render(request, 'Admin_rejected_orders.html',{'req':req})
+	if 'Ad_id' in request.session:
+		if request.session.has_key('Ad_id'):
+			Ad_id = request.session['Ad_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=Ad_id)
+		req = order_request.objects.filter(status = 'rejected')
+		return render(request, 'Admin_rejected_orders.html',{'req':req,'pro':pro})
+	else:
+		return redirect('login')
 
 def Admin_Staffs(request):
-	snum = staff_registration.objects.all().count()
-	return render(request, 'Admin_Staffs.html',{'snum':snum})
+	if 'Ad_id' in request.session:
+		if request.session.has_key('Ad_id'):
+			Ad_id = request.session['Ad_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=Ad_id)
+		snum = staff_registration.objects.all().count()
+		return render(request, 'Admin_Staffs.html',{'snum':snum,'pro':pro})
+	else:
+		return redirect('login')
 
 def Admin_addstaff(request):
-	dep = department.objects.all()
-	return render(request, 'Admin_addstaff.html',{'dep':dep})
+	if 'Ad_id' in request.session:
+		if request.session.has_key('Ad_id'):
+			Ad_id = request.session['Ad_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=Ad_id)
+		dep = department.objects.all()
+		return render(request, 'Admin_addstaff.html',{'dep':dep,'pro':pro})
+	else:
+		return redirect('login')
 
 def add_staff_save(request):
 	if request.method == 'POST':
@@ -309,31 +488,87 @@ def add_staff_save(request):
 		req.email = request.POST.get('email')
 		req.salary = request.POST.get('sal')
 		req.department_id = request.POST.get('dept')
-		req.password = request.POST.get('pass')
+		req.password = random.randint(10000, 99999)
 		req.status = 'active'
 		req.joiningdate = datetime.now()
 		req.photo = 'images/blank.jpg'
 		req.save()
-	return redirect('Admin_Staffs')
+		subject = 'Welcome warehouse'
+		message = 'Congratulations,\n' \
+        'You have successfully registered with our website.\n' \
+        'username :'+str(req.email)+'\n' 'password :'+str(req.password) + \
+        '\n' 'WELCOME '
+		recepient = str(req.email)
+		send_mail(subject, message, EMAIL_HOST_USER,
+                [recepient], fail_silently=False)
+		messages.success(request, 'success')
+	return redirect('Admin_addstaff')
 
 def Admin_all_staffs(request):
-	staff = staff_registration.objects.all()
-	return render(request, 'Admin_all_staffs.html',{'staff':staff})
+	if 'Ad_id' in request.session:
+		if request.session.has_key('Ad_id'):
+			Ad_id = request.session['Ad_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=Ad_id)
+		staff = staff_registration.objects.all()
+		return render(request, 'Admin_all_staffs.html',{'staff':staff,'pro':pro})
+	else:
+		return redirect('login')
 
 def staff_delete(request,id):
-    staff = staff_registration.objects.get(id=id)
-    staff.delete()
-    return redirect('Admin_all_staffs')
+	staff = staff_registration.objects.get(id=id)
+	staff.delete()
+	messages.success(request, 'deleted')
+	return redirect('Admin_all_staffs')
 
 def Admin_contact(request):
-	return render(request, 'Admin_contact.html')
+	if 'Ad_id' in request.session:
+		if request.session.has_key('Ad_id'):
+			Ad_id = request.session['Ad_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=Ad_id)
+		cou = contact_us.objects.filter( replay_status = 0 )
+		return render(request, 'Admin_contact.html',{'pro':pro,'cou':cou})
+	else:
+		return redirect('login')
+
+def contactus_replay(request,id):
+	if request.method == 'POST':            
+		cou = contact_us.objects.get(id=id)
+		cou.replay=request.POST.get('rep')
+		cou.replay_status = 1
+		cou.save()
+		subject = 'Greetings from warehouse'
+		message =  str(cou.replay)
+		recepient = str(cou.email)
+		send_mail(subject, message, EMAIL_HOST_USER,
+                  [recepient], fail_silently=False)
+	return redirect('Admin_contact')
 
 def Admin_departments(request):
-	dpt = department.objects.all()
-	return render(request, 'Admin_departments.html',{'dpt':dpt})
+	if 'Ad_id' in request.session:
+		if request.session.has_key('Ad_id'):
+			Ad_id = request.session['Ad_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=Ad_id)
+		dpt = department.objects.all()
+		return render(request, 'Admin_departments.html',{'dpt':dpt,'pro':pro})
+	else:
+		return redirect('login')
 
 def Admin_create_departments(request):
-	return render(request, 'Admin_create_dpt.html')
+	if 'Ad_id' in request.session:
+		if request.session.has_key('Ad_id'):
+			Ad_id = request.session['Ad_id']
+		else:
+			variable = "dummy"
+		pro = User.objects.filter(id=Ad_id)
+		return render(request, 'Admin_create_dpt.html',{'pro':pro})
+	else:
+		return redirect('login')
 
 def dpt_save(request):
 	if request.method == 'POST':
@@ -372,6 +607,45 @@ def Staff_index(request):
 	else:
 		return redirect('login')
 
+def Staff_change_password(request):
+	if 'stf_id' in request.session:
+		if request.session.has_key('stf_id'):
+			stf_id = request.session['stf_id']
+		else:
+			variable = "dummy"
+		mem1 = staff_registration.objects.filter(id = stf_id)
+		return render(request, 'Staff_change_password.html', {'mem1': mem1})
+	else:
+		return redirect('/')
+
+def Staff_changepwd_save(request):
+	if 'stf_id' in request.session:
+		if request.session.has_key('stf_id'):
+			stf_id = request.session['stf_id']
+		else:
+			variable = "dummy"
+		mem1 = staff_registration.objects.filter(id = stf_id)
+		if request.method == 'POST':
+			abc = staff_registration.objects.get(id=stf_id)
+    
+			oldps = request.POST['currentPassword']
+			newps = request.POST['newPassword']
+			cmps = request.POST.get('confirmPassword')
+			if oldps != newps:
+				if newps == cmps:
+					abc.password = request.POST.get('confirmPassword')
+					abc.save()
+					return redirect('Staff_dashboard')
+    
+			elif oldps == newps:
+				messages.add_message(request, messages.INFO, 'Current and New password same')
+			else:
+				messages.info(request, 'Incorrect password same')
+    
+			return redirect('Staff_change_password')
+		return redirect('Staff_change_password')
+
+
 def Admin_requests(request):
 	if 'stf_id' in request.session:
 		if request.session.has_key('stf_id'):
@@ -396,7 +670,7 @@ def request_accept(request,id):
 		if ( str > gt):
 			req.save()
 		else:
-			messages.success(request, 'Storage can not store this much quantity')
+			messages.success(request, 'warehouse does not have the requested storage available')
 	return redirect( 'Admin_requests')
 
 def request_reject(request,id):
@@ -425,7 +699,6 @@ def staff_acc_save(request, id):
 		stf.dateofbirth = request.POST.get('dob')
 		stf.email = request.POST.get('email')
 		stf.mobile = request.POST.get('contact')
-		stf.password = request.POST.get('ps')
 		stf.address1 = request.POST.get('ad1')
 		stf.address2 = request.POST.get('ad2')
 		stf.State = request.POST.get('state')
@@ -436,6 +709,7 @@ def staff_acc_save(request, id):
 		except:
 			pass
 		stf.save()
+		messages.success(request, 'updated successfully')
 	return redirect('Staff_account_settings')
 
 

@@ -61,7 +61,13 @@
                 <li><a href="{% url 'orders' %}"> Orders</a></li>
                 <li><a href="{% url 'status' %}">notifications</a></li>
                 <li><a href="{% url 'contact' %}">Contact</a></li>
-                <li><a href="{% url 'logout' %}">Logout</a></li>
+                <li class="has-children">
+                  <a href="#"><i class="icon-user mr-1"></i>Profile</a>
+                  <ul class="dropdown">
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    <li><a href="{% url 'Change_password' %}">Change Password</a></li>
+                  </ul>
+                </li>
                 {% else %}
                 <li class="active"><a href="{% url 'index' %}">Home</a></li>
                 <li><a href="{% url 'aboutus' %}">About Us</a></li>

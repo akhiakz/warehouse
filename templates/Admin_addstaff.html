@@ -37,12 +37,6 @@
                   <input type="text" class="form-control" id="exampleInputUsername2" name="sal">
                 </div>
               </div>
-              <div class="form-group row">
-                <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Password</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" id="exampleInputUsername2" name="pass">
-                </div>
-              </div>
               <div class="col-md-4 mx-auto">
               <button type="submit" class="btn w-100 text-light" style="background: #f89d13;">Submit</button>
             </div>
@@ -52,5 +46,12 @@
       </div>
     </div>
   </div>
+
+  {% if messages %}
+  {% for message in messages %}
+   {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+  {% endfor %}
+  {% endif %}
+
 
   {% endblock %}

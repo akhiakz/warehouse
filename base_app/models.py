@@ -70,3 +70,14 @@ class payment(models.Model):
 
 class storage(models.Model):
    space = models.CharField(max_length=255, null=True)
+
+class contact_us(models.Model):
+   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,null=True, blank=True)
+   firstname = models.CharField(max_length=255, null=True)
+   lastname = models.CharField(max_length=255, null=True)
+   email = models.EmailField(max_length=255, null=True,)
+   subject = models.EmailField(max_length=255, null=True,)
+   message = models.CharField(max_length=255, null=True)
+   replay = models.CharField(max_length=255, null=True)
+   replay_status = models.IntegerField(null=True, blank=True)
+

@@ -10,6 +10,7 @@ urlpatterns = [
     path('base/', views.base, name='base'),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
+    path('Admin_logout/', views.Admin_logout, name='Admin_logout'),
     path('staff_logout/', views.staff_logout, name='staff_logout'),
     # path('user_logout/', views.user_logout, name='user_logout'),
     path('loginpage', views.loginpage, name='loginpage'),
@@ -18,7 +19,7 @@ urlpatterns = [
     path('aboutus/', views.aboutus, name='aboutus'),
     path('services/', views.services, name='services'),
     path('contact/', views.contact, name='contact'),
-    path('sendmail', views.sendmail, name="sendmail"),
+    path('contactus_save', views.contactus_save, name="contactus_save"),
     path('requests/', views.requests, name='requests'),
     path('requests_send/', views.requests_send, name='requests_send'),
     path('status/', views.status, name='status'),
@@ -29,11 +30,14 @@ urlpatterns = [
     path('Ship_service/', views.Ship_service, name='Ship_service'),
     path('Ground_service/', views.Ground_service, name='Ground_service'),
     path('Warehousing/', views.Warehousing, name='Warehousing'),
-
+    path('Change_password/', views.Change_password, name='Change_password'),
+    path('forgot_password/', views.forgot_password, name='forgot_password'),
 
 #############   Admin module ################
 
     path('Admin_index/', views.Admin_index, name='Admin_index'),
+    path('Admin_changepassword/', views.Admin_changepassword, name='Admin_changepassword'),
+    path('Admin_changepwd_save/', views.Admin_changepwd_save, name='Admin_changepwd_save'),
     path('Admin_dashboard/', views.Admin_dashboard, name='Admin_dashboard'),
     path('Admin_neworder_dptcard/', views.Admin_neworder_dptcard, name='Admin_neworder_dptcard'),
     path('Admin_air_new_orders/', views.Admin_air_new_orders, name='Admin_air_new_orders'),
@@ -51,6 +55,7 @@ urlpatterns = [
     path('Admin_all_staffs/', views.Admin_all_staffs, name='Admin_all_staffs'),
     path('staff_delete/<int:id>', views.staff_delete, name='staff_delete'),
     path('Admin_contact/', views.Admin_contact, name='Admin_contact'),
+    path('contactus_replay/<int:id>', views.contactus_replay, name='contactus_replay'),
     path('Admin_departments/', views.Admin_departments, name='Admin_departments'),
     path('Admin_create_departments/', views.Admin_create_departments, name='Admin_create_departments'),
     path('dpt_save/', views.dpt_save, name='dpt_save'),
@@ -65,6 +70,8 @@ urlpatterns = [
 #############   Staff module ################
 
     path('Staff_index/', views.Staff_index, name='Staff_index'),
+    path('Staff_change_password/', views.Staff_change_password, name='Staff_change_password'),
+    path('Staff_changepwd_save/', views.Staff_changepwd_save, name='Staff_changepwd_save'),
     path('Staff_account_settings/', views.Staff_account_settings, name='Staff_account_settings'),
     path('staff_acc_save/<int:id>', views.staff_acc_save, name='staff_acc_save'),
     path('Staff_dashboard/', views.Staff_dashboard, name='Staff_dashboard'),
